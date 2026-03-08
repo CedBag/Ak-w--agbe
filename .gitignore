@@ -1,0 +1,33 @@
+# === SÉCURITÉ — NE JAMAIS PARTAGER ===
+.env
+.env.*
+*.env
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# === Environnement virtuel ===
+venv/
+env/
+.venv/
+
+# === Base de données locale ===
+*.db
+*.sqlite
+*.sqlite3
+
+# === Logs ===
+*.log
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+
+# === OS ===
+.DS_Store
+Thumbs.db

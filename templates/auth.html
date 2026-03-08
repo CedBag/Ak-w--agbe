@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion / Inscription - Akɔwɛɖagbe{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+<style>
+    .password-rules li {
+        color: gray;
+        transition: color 0.3s;
+        font-size: 14px;
+        list-style: inside disc;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="container">
+    <h2>Gérez votre budget avec Akɔwɛɖagbe</h2>
+    <p>Créez un compte ou connectez-vous pour commencer à suivre vos dépenses.</p>
+
+    <div class="card">
+        <div class="tabs">
+            <button class="tab active" onclick="showLogin()">Connexion</button>
+            <button class="tab" onclick="showRegister()">Inscription</button>
+        </div>
+
+        <!-- Formulaire de connexion -->
+        <form method="POST" action="{{ url_for('auth') }}" class="form-section" id="login-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="action" value="login">
+            <div class="form-group">
+                <label for="identifier">Nom d'utilisateur ou Email :</label>
+                <input type="text" id="identifier" name="identifier"
+                    placeholder="Entrez votre nom d'utilisateur ou email" required>
+            </div>
+            <div class="form-group">
+                <label for="password_login">Mot de passe :</label>
+                <input type="password" id="password_login" name="password" placeholder="Entrez votre mot de passe"
+                    required>
+            </div>
+            <button type="submit" class="btn btn-primary">Se Connecter</button>
+        </form>
+
+        <!-- Formulaire d'inscription -->
+        <form method="POST" action="{{ url_for('auth') }}" class="form-section hidden" id="register-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="action" value="register">
+            <div class="form-group">
+                <label for="username">Nom d'utilisateur :</label>
+                <input type="text" id="username" name="username" placeholder="Choisissez un nom d'utilisateur" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" placeholder="Entrez votre email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                <ul class="password-rules">
+                    <li>8 caractères minimum</li>
+                    <li>Une lettre majuscule</li>
+                    <li>Une lettre minuscule</li>
+                    <li>Un chiffre</li>
+                    <li>Un caractère spécial (!@#$...)</li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirmer le mot de passe :</label>
+                <input type="password" id="confirm_password" name="confirm_password"
+                    placeholder="Confirmez votre mot de passe" required>
+            </div>
+            <button type="submit" class="btn btn-primary">S'inscrire</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Pas de compte ? <a href="#" onclick="showRegister(); return false;">Inscrivez-vous</a> |
+            Déjà inscrit ? <a href="#" onclick="showLogin(); return false;">Connectez-vous</a>
+        </p>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="back-link">← Retour à l'accueil</a>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function showLogin() {
+        document.getElementById('login-form').classList.remove('hidden');
+        document.getElementById('register-form').classList.add('hidden');
+        document.querySelectorAll('.tab')[0].classList.add('active');
+        document.querySelectorAll('.tab')[1].classList.remove('active');
+    }
+    function showRegister() {
+        document.getElementById('register-form').classList.remove('hidden');
+        document.getElementById('login-form').classList.add('hidden');
+        document.querySelectorAll('.tab')[1].classList.add('active');
+        document.querySelectorAll('.tab')[0].classList.remove('active');
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const passwordInput = document.getElementById("password");
+        const rules = document.querySelectorAll(".password-rules li");
+
+        if (passwordInput) {
+            passwordInput.addEventListener("input", function () {
+                const value = passwordInput.value;
+                const conditions = [
+                    /.{8,}/.test(value),
+                    /[A-Z]/.test(value),
+                    /[a-z]/.test(value),
+                    /\d/.test(value),
+                    /[^A-Za-z0-9]/.test(value),
+                ];
+                rules.forEach((rule, index) => {
+                    rule.style.color = conditions[index] ? "green" : "gray";
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

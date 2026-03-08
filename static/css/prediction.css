@@ -1,0 +1,396 @@
+/* ===== PREDICTION.CSS - Styles pour la page de prédiction ===== */
+
+/* ===== NAVIGATION HEADER ===== */
+.header .nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.header .nav a {
+  color: var(--gray-600);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  transition: var(--transition-fast);
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.header .nav a:hover {
+  color: var(--primary);
+  background: var(--primary-50);
+  border-color: var(--primary-100);
+  transform: translateY(-1px);
+}
+
+.header .nav a:last-child {
+  background: var(--gradient-primary);
+  color: var(--white);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--primary-600);
+}
+
+.header .nav a:last-child:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== SECTION PRINCIPALE ===== */
+.main {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  padding: var(--space-8) 0;
+}
+
+.prediction-section {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: var(--space-8);
+}
+
+.prediction-section h2 {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: var(--space-8);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+
+/* ===== CONTENEUR PRÉDICTION ===== */
+.prediction-container {
+  background: var(--white);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-8);
+  margin-bottom: var(--space-8);
+  border: 1px solid var(--gray-200);
+  position: relative;
+  overflow: hidden;
+}
+
+.prediction-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+}
+
+/* ===== ICÔNE PRÉDICTION ===== */
+.prediction-icon {
+  font-size: 4rem;
+  margin-bottom: var(--space-4);
+  display: inline-block;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.2));
+}
+
+/* ===== RÉSULTAT PRÉDICTION ===== */
+.prediction-result {
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  color: var(--gray-700);
+  margin-bottom: var(--space-6);
+  padding: var(--space-4);
+  background: var(--primary-50);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--primary);
+}
+
+.prediction-result strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* ===== DÉTAILS PRÉDICTION ===== */
+.prediction-details {
+  background: var(--gray-50);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+  border: 1px solid var(--gray-200);
+}
+
+.prediction-details p {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--gray-700);
+}
+
+.prediction-details strong {
+  color: var(--gray-900);
+}
+
+/* Styles pour les niveaux de R² */
+.low-r2 {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.medium-r2 {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.high-r2 {
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* ===== INFORMATIONS PRÉDICTIVES ===== */
+.prediction-info {
+  text-align: left;
+  margin-bottom: var(--space-6);
+  padding: var(--space-4);
+  background: var(--info-light);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--info);
+}
+
+.prediction-info h3 {
+  color: var(--info);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.prediction-info p {
+  color: var(--gray-700);
+  margin: 0;
+  line-height: var(--leading-relaxed);
+}
+
+/* ===== CONSEILS ===== */
+.prediction-tips {
+  text-align: left;
+  padding: var(--space-4);
+  background: var(--success-light);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--success);
+  margin-bottom: var(--space-6);
+}
+
+.prediction-tips h4 {
+  color: var(--success);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+  font-weight: 600;
+}
+
+.prediction-tips ul {
+  margin: 0;
+  padding-left: var(--space-5);
+  color: var(--gray-700);
+}
+
+.prediction-tips li {
+  margin-bottom: var(--space-2);
+  line-height: var(--leading-relaxed);
+}
+
+.prediction-tips li:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== ERREUR PRÉDICTION ===== */
+.prediction-error {
+  padding: var(--space-6);
+  background: var(--warning-light);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--warning);
+  margin-bottom: var(--space-6);
+}
+
+.prediction-error p {
+  color: var(--gray-700);
+  margin-bottom: var(--space-3);
+  line-height: var(--leading-relaxed);
+}
+
+.prediction-error p:last-child {
+  margin-bottom: 0;
+}
+
+.prediction-error strong {
+  color: var(--warning);
+  font-weight: 700;
+}
+
+/* ===== LIEN RETOUR ===== */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background: var(--gradient-primary);
+  color: var(--white);
+  text-decoration: none;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-normal);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.back-link::before {
+  content: '←';
+  font-size: var(--text-lg);
+  transition: var(--transition-fast);
+}
+
+.back-link:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.back-link:hover::before {
+  transform: translateX(-2px);
+}
+
+/* ===== ANIMATIONS ===== */
+.prediction-container {
+  animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.prediction-result {
+  animation: slideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.prediction-details {
+  animation: slideIn 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.prediction-info {
+  animation: slideIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.prediction-tips {
+  animation: slideIn 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .prediction-section {
+    padding: var(--space-4);
+  }
+  
+  .prediction-section h2 {
+    font-size: var(--text-3xl);
+  }
+  
+  .prediction-container {
+    padding: var(--space-6);
+  }
+  
+  .prediction-icon {
+    font-size: 3rem;
+  }
+  
+  .prediction-result {
+    font-size: var(--text-lg);
+  }
+  
+  .header .nav {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .header .nav a {
+    width: 100%;
+    text-align: center;
+    padding: var(--space-3);
+  }
+  
+  .main {
+    padding: var(--space-4) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .prediction-section {
+    padding: var(--space-3);
+  }
+  
+  .prediction-container {
+    padding: var(--space-4);
+  }
+  
+  .prediction-section h2 {
+    font-size: var(--text-2xl);
+  }
+  
+  .prediction-icon {
+    font-size: 2.5rem;
+  }
+  
+  .prediction-result {
+    font-size: var(--text-base);
+  }
+  
+  .prediction-info,
+  .prediction-tips,
+  .prediction-error {
+    padding: var(--space-3);
+  }
+  
+  .back-link {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===== DARK MODE ===== */
+@media (prefers-color-scheme: dark) {
+  .prediction-container {
+    background: var(--gray-50);
+    border-color: var(--gray-200);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .prediction-result {
+    background: rgba(37, 99, 235, 0.1);
+    border-left-color: var(--primary);
+  }
+  
+  .prediction-details {
+    background: var(--gray-100);
+    border-color: var(--gray-200);
+  }
+  
+  .prediction-info {
+    background: rgba(2, 132, 199, 0.1);
+    border-left-color: var(--info);
+  }
+  
+  .prediction-tips {
+    background: rgba(5, 150, 105, 0.1);
+    border-left-color: var(--success);
+  }
+  
+  .prediction-error {
+    background: rgba(217, 119, 6, 0.1);
+    border-left-color: var(--warning);
+  }
+}

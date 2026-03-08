@@ -1,0 +1,79 @@
+{% extends "base_app.html" %}
+
+{% block title %}Prédiction des Dépenses - Akɔwɛɖagbe{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prediction.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="prediction-section">
+        <h2 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-magic-wand"
+                style="color: var(--primary);"></i> Prédiction des Dépenses Futures</h2>
+
+        <div class="prediction-container">
+            <div class="prediction-icon"><i class="ph ph-chart-bar" style="color: var(--primary); font-size: 3rem;"></i>
+            </div>
+
+            {% if prediction %}
+            <div class="prediction-result">
+                Basé sur votre historique de <strong>{{ num_data }} mois</strong>,
+                votre budget de dépenses estimé pour le <strong>mois prochain</strong> est de
+                <strong>{{ "{:,.0f}".format(prediction) }} XOF</strong>.
+            </div>
+
+            <div class="prediction-details">
+                {% if method == 'regression' %}
+                <p><i class="ph ph-trend-down" style="color: var(--primary);"></i> <strong>Méthode :</strong> Analyse de
+                    Tendance (Régression Linéaire)<br>
+                    <strong>Corrélation (R²) :</strong> <strong>{{ r2_score }}</strong>
+                    {% if r2_score < 0.5 %} <span class="low-r2">(faible précision — vos dépenses fluctuent beaucoup
+                        d'un mois à l'autre)</span>
+                        {% elif r2_score < 0.8 %} <span class="medium-r2">(précision moyenne)</span>
+                            {% else %} <span class="high-r2">(bonne fiabilité — vos données suivent une tendance
+                                claire)</span>
+                            {% endif %}
+                </p>
+                {% else %}
+                <p><i class="ph ph-chart-bar" style="color: var(--primary);"></i> <strong>Méthode :</strong> Moyenne
+                    Mensuelle<br>
+                    <span class="medium-r2">(Utilisée car vous avez moins de 3 mois d'historique. Ajoutez plus de
+                        données mensuelles pour activer l'analyse de tendance.)</span>
+                </p>
+                {% endif %}
+            </div>
+
+            <div class="prediction-info">
+                <h3 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-chart-line-up"
+                        style="color: var(--primary);"></i> Analyse prédictive mensuelle</h3>
+                <p>Cette estimation synthétise vos habitudes de dépenses mensuelles pour vous donner une idée de votre
+                    enveloppe budgétaire globale le mois prochain. Elle s'ajustera automatiquement au fur et à mesure
+                    que vous ajoutez de nouvelles transactions.</p>
+            </div>
+
+            <div class="prediction-tips">
+                <h4>Conseils pour optimiser vos dépenses</h4>
+                <ul>
+                    <li>Ajoutez régulièrement vos dépenses pour affiner la prédiction</li>
+                    <li>Évitez les pics soudains non planifiés</li>
+                    <li>Créez des budgets par catégorie</li>
+                    <li>Consultez cette page en fin de mois pour préparer le suivant</li>
+                </ul>
+            </div>
+            {% else %}
+            <div class="prediction-error">
+                <p style="display: flex; align-items: center; gap: 8px; color: var(--danger);"><i
+                        class="ph ph-warning-circle" style="font-size: 1.25rem;"></i> Il n'y a pas encore assez de
+                    données pour générer une prédiction fiable.</p>
+                <p>Ajoutez au moins <strong>1 dépense</strong> pour que le modèle puisse calculer une première
+                    estimation.</p>
+                <a href="{{ url_for('add_expense') }}" class="btn btn-primary" style="margin-top: 1rem;"><i
+                        class="ph ph-minus-circle"></i> Ajouter des
+                    dépenses</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

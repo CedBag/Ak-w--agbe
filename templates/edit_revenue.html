@@ -1,0 +1,64 @@
+{% extends "base_app.html" %}
+
+{% block title %}Modifier un Revenu - Akɔwɛɖagbe{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_revenue.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="container">
+    <h2>✏️ Modifier un Revenu</h2>
+
+    <form method="POST" action="{{ url_for('edit_revenue', revenue_id=revenue_id) }}" class="form-section">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="form-group">
+            <label for="amount">Montant (XOF)</label>
+            <input type="number" id="amount" name="amount" required value="{{ revenue[0] }}" min="1">
+        </div>
+        <div class="form-group">
+            <label for="category">Catégorie</label>
+            <select id="category" name="category" required onchange="toggleCustomCategory()">
+                {% set predefined_categories = ['Salaire', 'Allocations', 'Dons', 'Tontine', 'Commerce', 'Autres'] %}
+                {% for cat in predefined_categories %}
+                <option value="{{ cat }}" {% if revenue[1]==cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+                {% if revenue[1] not in predefined_categories %}
+                <option value="Autres" selected>Autres (précisez)</option>
+                {% endif %}
+            </select>
+            <input type="text" id="custom_category" name="custom_category"
+                placeholder="Entrez une catégorie personnalisée" {% if revenue[1] not in predefined_categories
+                %}value="{{ revenue[1] }}" style="display:block; margin-top:0.5rem;" required{% else
+                %}style="display:none; margin-top:0.5rem;" {% endif %}>
+        </div>
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required value="{{ revenue[2] }}">
+        </div>
+        <div class="form-group">
+            <label for="description">Description (optionnel)</label>
+            <textarea id="description" name="description">{{ revenue[3] if revenue[3] else '' }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Enregistrer les modifications</button>
+        <a href="{{ request.referrer or url_for('view_revenues') }}" class="btn btn-secondary"
+            style="margin-left: 1rem;">Annuler</a>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleCustomCategory() {
+        const sel = document.getElementById('category');
+        const custom = document.getElementById('custom_category');
+        if (sel.value === 'Autres') {
+            custom.style.display = 'block';
+            custom.required = true;
+        } else {
+            custom.style.display = 'none';
+            custom.required = false;
+        }
+    }
+</script>
+{% endblock %}

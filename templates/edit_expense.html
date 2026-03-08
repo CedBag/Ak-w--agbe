@@ -1,0 +1,65 @@
+{% extends "base_app.html" %}
+
+{% block title %}Modifier une Dépense - Akɔwɛɖagbe{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_expense.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="form-section container">
+    <h2>✏️ Modifier une Dépense</h2>
+
+    <form method="POST" action="{{ url_for('edit_expense', expense_id=expense_id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="form-group">
+            <label for="amount">Montant (XOF) :</label>
+            <input type="number" step="0.01" name="amount" id="amount" required value="{{ expense[0] }}" min="1">
+        </div>
+        <div class="form-group">
+            <label for="category">Catégorie :</label>
+            <select name="category" id="category" required onchange="toggleCustomCategory()">
+                {% set predefined_categories = ['Alimentation', 'Transport Zêm', 'Loyer', 'Santé', 'Éducation',
+                'Cérémonies/Dons', 'Communication/Data', 'Tontine', 'Autres'] %}
+                {% for cat in predefined_categories %}
+                <option value="{{ cat }}" {% if expense[1]==cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+                {% if expense[1] not in predefined_categories %}
+                <option value="Autres" selected>Autres (précisez)</option>
+                {% endif %}
+            </select>
+            <input type="text" name="custom_category" id="custom_category" class="custom-category"
+                placeholder="Ex: Factures d'eau, électricité..." {% if expense[1] not in predefined_categories
+                %}value="{{ expense[1] }}" style="display:block; margin-top:0.5rem;" required{% else
+                %}style="display:none; margin-top:0.5rem;" {% endif %}>
+        </div>
+        <div class="form-group">
+            <label for="date">Date :</label>
+            <input type="date" name="date" id="date" required value="{{ expense[2] }}">
+        </div>
+        <div class="form-group">
+            <label for="description">Description (optionnel) :</label>
+            <textarea name="description" id="description">{{ expense[3] if expense[3] else '' }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+        <a href="{{ request.referrer or url_for('view_expenses') }}" class="btn btn-secondary"
+            style="margin-left: 1rem;">Annuler</a>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleCustomCategory() {
+        const sel = document.getElementById('category');
+        const custom = document.getElementById('custom_category');
+        if (sel.value === 'Autres') {
+            custom.style.display = 'block';
+            custom.required = true;
+        } else {
+            custom.style.display = 'none';
+            custom.required = false;
+        }
+    }
+</script>
+{% endblock %}

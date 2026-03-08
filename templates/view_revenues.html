@@ -1,0 +1,101 @@
+{% extends "base_app.html" %}
+
+{% block title %}Mes Revenus - Akɔwɛɖagbe{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/view_revenues.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<section class="container">
+    <h2 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-chart-line-up"
+            style="color: var(--success);"></i> Mes Revenus</h2>
+    <p>Consultez vos revenus enregistrés et filtrez-les par date.</p>
+
+    <!-- Filtres -->
+    <div class="filters"
+        style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 2rem; background: var(--card-bg); padding: 1rem; border-radius: var(--border-radius); box-shadow: var(--shadow-sm);">
+        <label for="year-filter" class="form-label" style="margin-bottom: 0;">Année :</label>
+        <select id="year-filter" class="form-select" style="width: auto;">
+            <option value="">Toutes</option>
+            {% for year in years %}
+            <option value="{{ year }}" {% if selected_year==year %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="month-filter" class="form-label" style="margin-bottom: 0;">Mois :</label>
+        <select id="month-filter" class="form-select" style="width: auto;">
+            <option value="">Tous</option>
+            {% for month in months %}
+            <option value="{{ month.value }}" {% if selected_month==month.value %}selected{% endif %}>{{ month.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label for="day-filter" class="form-label" style="margin-bottom: 0;">Jour :</label>
+        <select id="day-filter" class="form-select" style="width: auto;">
+            <option value="">Tous</option>
+            {% for day in days %}
+            <option value="{{ day }}" {% if selected_day==day %}selected{% endif %}>{{ day }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Graphique -->
+    <div class="chart-section" style="margin: 20px 0;">
+        <h3>Graphique des Revenus par Catégorie</h3>
+        <div style="position: relative; height: 400px; width: 100%;">
+            <canvas id="allRevenuesChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Tableau -->
+    {% if revenues %}
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Montant (XOF)</th>
+                    <th>Catégorie</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="revenues-table-body">
+                {% for revenue in revenues %}
+                <tr>
+                    <td>{{ "{:,.0f}".format(revenue[0]) }}</td>
+                    <td>{{ revenue[1] }}</td>
+                    <td>{{ revenue[2] }}</td>
+                    <td>{{ revenue[3] or '—' }}</td>
+                    <td style="white-space: nowrap;">
+                        <a href="{{ url_for('edit_revenue', revenue_id=revenue[4]) }}" class="btn btn-sm btn-outline"
+                            title="Modifier"><i class="ph ph-pencil-simple"></i></a>
+                        <form method="POST" action="{{ url_for('delete_revenue', revenue_id=revenue[4]) }}"
+                            style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce revenu ?')"
+                                title="Supprimer"><i class="ph ph-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Aucun revenu enregistré pour cette période. <a href="{{ url_for('add_revenue') }}">Ajoutez un revenu</a> pour
+        commencer.</p>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var allRevenues = {{ revenues | tojson | safe if revenues else '[]' }};
+</script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

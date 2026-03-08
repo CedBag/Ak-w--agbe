@@ -1,0 +1,63 @@
+{% extends "base_app.html" %}
+
+{% block title %}Ajouter un Revenu - Akɔwɛɖagbe{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_revenue.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="container">
+    <h2 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-plus-circle"
+            style="color: var(--success);"></i> Ajouter un Revenu</h2>
+
+    <form method="POST" action="{{ url_for('add_revenue') }}" class="form-section">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="form-group">
+            <label for="amount">Montant (XOF)</label>
+            <input type="number" id="amount" name="amount" placeholder="Entrez le montant" required min="1">
+        </div>
+        <div class="form-group">
+            <label for="category">Catégorie</label>
+            <select id="category" name="category" required onchange="toggleCustomCategory()">
+                <option value="Salaire">Salaire</option>
+                <option value="Allocations">Allocations</option>
+                <option value="Dons">Dons</option>
+                <option value="Tontine">Tontine</option>
+                <option value="Commerce">Commerce</option>
+                <option value="Autres">Autres (précisez)</option>
+            </select>
+            <input type="text" id="custom_category" name="custom_category"
+                placeholder="Entrez une catégorie personnalisée" style="display:none; margin-top: 0.5rem;">
+        </div>
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description (optionnel)</label>
+            <textarea id="description" name="description" placeholder="Entrez une description"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Ajouter le Revenu</button>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="margin-left: 1rem;">Annuler</a>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleCustomCategory() {
+        const sel = document.getElementById('category');
+        const custom = document.getElementById('custom_category');
+        if (sel.value === 'Autres') {
+            custom.style.display = 'block';
+            custom.required = true;
+        } else {
+            custom.style.display = 'none';
+            custom.required = false;
+            custom.value = '';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', toggleCustomCategory);
+</script>
+{% endblock %}

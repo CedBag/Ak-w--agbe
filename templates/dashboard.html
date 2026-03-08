@@ -1,0 +1,120 @@
+{% extends "base_app.html" %}
+
+{% block title %}Tableau de Bord - Akɔwɛɖagbe{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<!-- Welcome -->
+<section class="welcome">
+    <h1 style="display: flex; align-items: center; gap: 8px;">Bienvenue, {{ user_name }} ! <i
+            class="ph ph-hand-waving"></i></h1>
+    <p>Voici un aperçu de vos finances ce mois-ci.</p>
+</section>
+
+<!-- Cartes financières -->
+<section class="financial-overview">
+    <div class="overview-card">
+        <h3 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-money"
+                style="color: var(--danger);"></i> Dépenses ce Mois</h3>
+        <p class="amount">{{ "{:,.0f}".format(total_expenses) }} XOF</p>
+    </div>
+    <div class="overview-card">
+        <h3 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-wallet"
+                style="color: var(--success);"></i> Revenus ce Mois</h3>
+        <p class="amount">{{ "{:,.0f}".format(total_revenues) }} XOF</p>
+    </div>
+    <div class="overview-card {% if net_balance >= 0 %}positive{% else %}negative{% endif %}">
+        <h3 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-trend-up"
+                style="color: var(--primary);"></i> Solde Net</h3>
+        <p class="amount">{{ "{:,.0f}".format(net_balance) }} XOF</p>
+    </div>
+</section>
+
+<!-- Graphique dépenses -->
+<section class="chart-section container">
+    <h2 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-pie-chart"
+            style="color: var(--primary);"></i> Répartition des Dépenses (Mois en cours)</h2>
+    {% if categories_data %}
+    <div class="chart-wrapper">
+        <canvas id="expensesChart"></canvas>
+    </div>
+    {% else %}
+    <p>Aucune dépense enregistrée ce mois-ci.</p>
+    {% endif %}
+    <a href="{{ url_for('view_expenses') }}" class="btn btn-secondary">→ Voir le détail</a>
+</section>
+
+<!-- Dernières transactions -->
+<section class="recent-section container">
+    <h2 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-clock-counter-clockwise"
+            style="color: var(--primary);"></i> Dernières Transactions</h2>
+    {% if recent_transactions %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Montant (XOF)</th>
+                <th>Catégorie</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tx in recent_transactions %}
+            <tr>
+                <td>{{ "{:,.0f}".format(tx[0]) }}</td>
+                <td>{{ tx[1] }}</td>
+                <td>{{ tx[2] }}</td>
+                <td>{{ tx[3] or '—' }}</td>
+                <td style="white-space: nowrap;">
+                    <a href="{{ url_for('edit_expense', expense_id=tx[4]) }}" class="btn btn-sm btn-outline"
+                        title="Modifier"><i class="ph ph-pencil-simple"></i></a>
+                    <form method="POST" action="{{ url_for('delete_expense', expense_id=tx[4]) }}"
+                        style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                        <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette dépense ?')"
+                            title="Supprimer"><i class="ph ph-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Aucune transaction enregistrée.</p>
+    {% endif %}
+</section>
+
+<!-- Actions rapides -->
+<section class="quick-actions container">
+    <a href="{{ url_for('add_expense') }}" class="btn btn-primary"><i class="ph ph-minus-circle"></i> Ajouter une
+        Dépense</a>
+    <a href="{{ url_for('add_revenue') }}" class="btn btn-success"><i class="ph ph-plus-circle"></i> Ajouter un
+        Revenu</a>
+    <a href="{{ url_for('view_expenses') }}" class="btn btn-secondary"><i class="ph ph-chart-bar"></i> Mes Rapports</a>
+</section>
+
+<!-- Astuce quotidienne -->
+<section class="daily-tip container">
+    <div class="tip-box">
+        <h2 style="display: flex; align-items: center; justify-content: center; gap: 8px;"><i class="ph ph-lightbulb"
+                style="color: #f59e0b;"></i> L'astuce Akɔwɛɖagbe</h2>
+        <p>{{ daily_tip }}</p>
+        <a href="{{ url_for('predict_expenses') }}" class="btn btn-outline"><i class="ph ph-magic-wand"></i> Voir ma
+            Prédiction</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var categoriesLabels = {{ categories_labels | tojson | safe if categories_labels is defined else '[]' }};
+    var categoriesAmounts = {{ categories_amounts | tojson | safe if categories_amounts is defined else '[]' }};
+</script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

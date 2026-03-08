@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Akɔwɛɖagbe{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    {% block styles %}{% endblock %}
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Overlay pour mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar gauche -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="{{ url_for('dashboard') }}" class="logo" style="text-decoration: none;">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Akɔwɛɖagbe Logo"
+                        style="height: 32px; width: auto;">
+                    <span style="font-size: 1.25rem;">Akɔwɛɖagbe</span>
+                </a>
+                <button class="mobile-close" onclick="toggleSidebar()"><i class="ph ph-x"></i></button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="nav-section-title">Principal</p>
+                <a href="{{ url_for('dashboard') }}" class="sidebar-link"><i class="ph ph-house"></i>
+                    <span>Accueil</span></a>
+                <a href="{{ url_for('view_expenses') }}" class="sidebar-link"><i class="ph ph-chart-line-down"
+                        style="color: var(--danger);"></i> <span>Dépenses</span></a>
+                <a href="{{ url_for('view_revenues') }}" class="sidebar-link"><i class="ph ph-chart-line-up"
+                        style="color: var(--success);"></i> <span>Revenus</span></a>
+                <a href="{{ url_for('predict_expenses') }}" class="sidebar-link"><i class="ph ph-magic-wand"
+                        style="color: var(--primary);"></i> <span>IA Prédiction</span></a>
+
+                <p class="nav-section-title">Saisie Rapide</p>
+                <a href="{{ url_for('add_expense') }}" class="sidebar-link"><i class="ph ph-minus-circle"></i>
+                    <span>Saisir
+                        Dépense</span></a>
+                <a href="{{ url_for('add_revenue') }}" class="sidebar-link"><i class="ph ph-plus-circle"></i>
+                    <span>Saisir
+                        Revenu</span></a>
+
+                <p class="nav-section-title">Compte</p>
+                <a href="{{ url_for('profile_settings') }}" class="sidebar-link"><i class="ph ph-gear"></i>
+                    <span>Paramètres</span></a>
+                <a href="{{ url_for('logout') }}" class="sidebar-link text-danger" style="margin-top: auto;"><i
+                        class="ph ph-sign-out"></i> <span>Déconnexion</span></a>
+            </nav>
+        </aside>
+
+        <!-- Contenu principal droit -->
+        <div class="main-content">
+            <header class="topbar">
+                <div style="display: flex; align-items: center; gap: var(--space-4);">
+                    <button class="mobile-toggle" onclick="toggleSidebar()">
+                        <i class="ph ph-list"></i>
+                    </button>
+                    <button class="desktop-toggle" onclick="toggleDesktopSidebar()">
+                        <i class="ph ph-list"></i>
+                    </button>
+                </div>
+                <a href="{{ url_for('profile_settings') }}" class="topbar-user">
+                    <span>Mon Espace</span>
+                    <div class="user-avatar"><i class="ph ph-user"></i></div>
+                </a>
+            </header>
+
+            <!-- Messages flash globaux -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-container container" style="margin-top: var(--space-4);">
+                {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}" style="display: flex; align-items: center; gap: 8px;">
+                    {% if category == 'error' %}
+                    <i class="ph ph-warning-circle" style="font-size: 1.25rem;"></i>
+                    {% elif category == 'success' %}
+                    <i class="ph ph-check-circle" style="font-size: 1.25rem;"></i>
+                    {% else %}
+                    <i class="ph ph-info" style="font-size: 1.25rem;"></i>
+                    {% endif %}
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <main class="main" style="padding: var(--space-4) 0 var(--space-8);">
+                {% block content %}{% endblock %}
+            </main>
+
+            <!-- Footer -->
+            <footer class="footer"
+                style="margin-top: auto; padding: var(--space-6); background: transparent; border-top: 1px solid var(--gray-200);">
+                <div class="container footer-content text-left">
+                    <p class="footer-copyright" style="color: var(--gray-500); font-size: var(--text-sm); margin: 0;">©
+                        2025 Akɔwɛɖagbe. Tous droits réservés.</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Script pour le menu mobile -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        }
+
+        function toggleDesktopSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            // Sauvegarder la préférence de l'utilisateur (optionnel, mais utile)
+            const isCollapsed = document.getElementById('sidebar').classList.contains('collapsed');
+            localStorage.setItem('sidebarCollapsed', isCollapsed);
+        }
+
+        // Appliquer l'état sauvegardé de la sidebar au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (isCollapsed && window.innerWidth > 1024) {
+                document.getElementById('sidebar').classList.add('collapsed');
+            }
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

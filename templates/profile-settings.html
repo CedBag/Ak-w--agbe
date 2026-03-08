@@ -1,0 +1,75 @@
+{% extends "base_app.html" %}
+
+{% block title %}Profil et Paramètres - Akɔwɛɖagbe{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile-settings.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="form-section">
+    <div class="container">
+        <h2 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-gear"
+                style="color: var(--primary);"></i> Profil et Paramètres</h2>
+        <p class="text-balance">Gérez vos informations personnelles et vos données en toute sécurité.</p>
+
+        <!-- Informations du profil -->
+        <div class="profile-card">
+            <form method="POST" action="{{ url_for('profile_settings') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+                <h3>Vos Coordonnées</h3>
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur <span class="text-danger">*</span></label>
+                    <input type="text" name="username" id="username" value="{{ username }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email <span class="text-danger">*</span></label>
+                    <input type="email" name="email" id="email" value="{{ email }}" required>
+                </div>
+
+                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+                <h3>Modifier le mot de passe</h3>
+                <div class="form-group">
+                    <label for="current_password">Mot de passe actuel :</label>
+                    <input type="password" name="current_password" id="current_password"
+                        placeholder="Requis uniquement pour changer de mot de passe">
+                </div>
+                <div class="form-group">
+                    <label for="new_password">Nouveau mot de passe :</label>
+                    <input type="password" name="new_password" id="new_password"
+                        placeholder="Laissez vide pour conserver l'actuel">
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirmer le nouveau mot de passe :</label>
+                    <input type="password" name="confirm_password" id="confirm_password">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem;"><i
+                        class="ph ph-floppy-disk"></i> Enregistrer les
+                    modifications</button>
+            </form>
+
+            <div class="security-indicator" style="margin-top: 1.5rem; display: flex; align-items: center; gap: 8px;">
+                <i class="ph ph-lock-key" style="color: var(--success); font-size: 1.25rem;"></i> Vos données sont
+                sécurisées et chiffrées
+            </div>
+        </div>
+
+        <!-- Gestion des données -->
+        <div class="actions-section">
+            <h3 style="display: flex; align-items: center; gap: 8px;"><i class="ph ph-database"
+                    style="color: var(--danger);"></i> Gestion des données</h3>
+
+            <form method="POST" action="{{ url_for('delete_data') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <button type="submit" class="btn btn-danger"
+                    onclick="return confirm('Voulez-vous vraiment supprimer TOUTES vos données ? Cette action est irréversible.');">
+                    <i class="ph ph-trash"></i> Supprimer toutes les données
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Akɔwɛɖagbe - Gestion Budgétaire au Bénin{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <h2>Fini le casse-tête des dépenses ! Reprenez le contrôle de votre argent.</h2>
+    <p>Suivez facilement où va votre argent, visualisez vos habitudes et recevez des conseils adaptés à votre vie au
+        Bénin.</p>
+    <a href="{{ url_for('auth') }}" class="nav-cta">Créez Votre Compte Gratuit</a>
+</section>
+
+<!-- Pain Points Section -->
+<section class="pain-points">
+    <h3 class="reveal">La gestion de votre budget quotidien au Bénin est un défi ?</h3>
+    <div class="points">
+        <div class="point reveal delay-100">
+            <span class="icon"><i class="ph ph-trend-down" style="color: var(--danger);"></i></span>
+            <p>Ne pas savoir où part votre argent chaque mois ?</p>
+        </div>
+        <div class="point reveal delay-200">
+            <span class="icon"><i class="ph ph-warning-circle" style="color: #f59e0b;"></i></span>
+            <p>Subir le stress des dépenses imprévues (santé, cérémonies) ?</p>
+        </div>
+        <div class="point reveal delay-300">
+            <span class="icon"><i class="ph ph-lightbulb" style="color: #f59e0b;"></i></span>
+            <p>Difficulté à épargner pour vos projets ou les études des enfants ?</p>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <h3 class="reveal">Découvrez Akɔwɛɖagbe : Votre Solution Simple et Locale</h3>
+    <div class="feature-grid">
+        <div class="feature reveal delay-100">
+            <span class="icon"><i class="ph ph-pencil-simple" style="color: var(--primary);"></i></span>
+            <h4>Suivez vos dépenses sans effort</h4>
+            <p>Enregistrez chaque franc dépensé en quelques clics. Fini les oublis !</p>
+        </div>
+        <div class="feature reveal delay-200">
+            <span class="icon"><i class="ph ph-chart-bar" style="color: var(--primary);"></i></span>
+            <h4>Voyez clair dans votre budget</h4>
+            <p>Des graphiques simples pour identifier où vous pouvez économiser.</p>
+        </div>
+        <div class="feature reveal delay-300">
+            <span class="icon"><i class="ph ph-chat-circle" style="color: var(--primary);"></i></span>
+            <h4>Recevez des conseils adaptés</h4>
+            <p>Des astuces pensées pour la vie au Bénin, pour mieux gérer et anticiper.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="why-choose">
+    <h3 class="reveal">Pensé pour Vous, Fait pour le Bénin</h3>
+    <ul class="reveal delay-100">
+        <li><i class="ph ph-star" style="color: #f59e0b;"></i> Ultra-Simple à Utiliser : Interface intuitive, même avec
+            une connexion limitée.</li>
+        <li><i class="ph ph-lock-key" style="color: var(--success);"></i> 100% Confidentiel : Vos données sont protégées
+            (Conforme APDP Bénin).</li>
+        <li>🇧🇯 Adapté à Votre Quotidien : Catégories et conseils qui reflètent la vie béninoise.</li>
+        <li><i class="ph ph-trend-up" style="color: var(--success);"></i> Votre Allié pour l'Avenir : Construisez une
+            base financière solide.</li>
+    </ul>
+    <div class="reveal delay-200" style="text-align: center;">
+        <a href="{{ url_for('auth') }}" class="nav-cta">Prêt(e) à gérer votre budget ? Inscrivez-vous !</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const reveals = document.querySelectorAll(".reveal");
+
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealOnScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add("active");
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        reveals.forEach(reveal => {
+            revealOnScroll.observe(reveal);
+        });
+    });
+</script>
+{% endblock %}
