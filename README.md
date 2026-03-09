@@ -58,4 +58,6 @@ Puis ouvrez votre navigateur à l'adresse **http://127.0.0.1:5000** !
 
 ## 👤 Auteur
 
-**Cedoque BAGBONON** - Développeur Web en formation.
+**Cedoque BAGBONON** - Data Analyst (Licence en Informatique Industrielle et Maintenance, spécialité Analyse des Données).
+
+*Projet initialement réalisé en troisième année d'université (Juin-Juillet 2025), et ayant bénéficié d'une mise à jour majeure (Interface, Sécurité, Modèle d'Analyse) en Mars 2026.*
